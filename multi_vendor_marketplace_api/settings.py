@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'users',
     'products',
     'cart',
@@ -48,7 +49,26 @@ AUTH_USER_MODEL = 'users.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    # Add these global pagination settings
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,  # Set temporary page size to 2 for easy testing
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ),
+    # 1. Add Global Throttle Classes
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle', # For unauthenticated users
+        'rest_framework.throttling.UserRateThrottle', # For logged-in users
+    ],
+    
+    # 2. Define the exact limits per minute/day
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/minute',  # Anonymous user can hit max 5 times per minute
+        'user': '20/minute', # Logged-in user can hit max 20 times per minute
+    },
 }
 
 
@@ -95,6 +115,11 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306',
+        'OPTIONS': 
+        {
+        # This line enables the Strict Mode
+        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 
@@ -139,3 +164,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# SSLCommerz Sandbox Credentials
+SSLCOMMERZ_STORE_ID = 'testbox'
+SSLCOMMERZ_STORE_PASS = 'qwerty'
+SSLCOMMERZ_IS_SANDBOX = True
+
+# Base URL of project
+BASE_URL = 'http://127.0.0.1:8000'
