@@ -37,4 +37,6 @@ A scalable Multi-Vendor Marketplace API built with Django REST Framework (DRF). 
 | | `/api/products/` | POST | Seller Only | Allows verified sellers to add new products |
 | | `/api/products/update/<id>/` | PUT/PATCH | Seller + Owner | Updates partial/full details of a specific product |
 | | `/api/products/delete/<id>/` | DELETE | Seller + Owner | Permanently removes a product from the database |
+| **Orders** | `/api/orders/` | POST | Buyer Only | Places a new order from cart items |
+| | `/api/orders/` | GET | Buyer Only | Lists all orders placed by the current buyer |
 | **Payment** | `/api/payment/checkout/` | POST | Authenticated | Initializes SSLCommerz payment session |
